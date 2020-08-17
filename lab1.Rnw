@@ -1,0 +1,172 @@
+\documentclass{article}
+\usepackage{url,hyperref}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,array,comment,eucal}
+\input{macros}
+
+
+
+\begin{document}
+\title{Lab1: Introduction to R and LaTeX using Sweave}
+\author{Your Name}
+\date{\today}
+\maketitle
+
+\section*{Introduction}
+
+Sweave files look like LaTeX files, but have a {\tt .Rnw} ending.  A key difference is that they allow you to embed R code within the \LaTeX document.  This is similar to the point of RMarkdown, but if your document has a lot of equations, you may find that the Rnw files provide more control and options than using Rmarkdown.
+
+\section*{Creating a New Document}
+
+To start a new Sweave document, go to {\tt File > New File > R Sweave}. This will provide a basic Sweave template. From here, you can enter text and LaTeX commands and \R chunks into your document.
+
+\section*{Getting Started Producing a PDF file}
+If you have opened the .Rnw file for this document in RStudio, you can produce the PDF by clicking the Compile PDF button at the top of the window. The system PDF viewer should pop up and will update whenever you re-compile the PDF.  I suggest to compile frequently to make debugging errors easier!
+
+\section*{Basics of \LaTeX}
+
+If you look at this file in the editor, the material prior to the line that has \begin{verbatim}\begin{document}\end{verbatim} is what is known as the preamble:
+
+\begin{verbatim}
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{url,hyperref}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,array,comment,eucal}
+\input{macros}
+
+\end{verbatim}
+The first line tells \LaTeX what type of document you wish to produce, in this case using the article class.  The following lines specify which additional packages to use for \LaTeX, ie  the {\tt fullpage} package makes it easy to use the full page with 1 inch margins, rather than the default margins.   The last line includes macros or shortcuts that I have found useful in producing the slides for this class (so maybe they will be helpful for HW).
+For example,
+$$
+\Y = \X \b + \eps
+$$
+
+\subsection*{Document Body}
+The main text falls between the commands
+\begin{verbatim}
+\begin{document}
+
+\end{document}
+\end{verbatim}
+To produce a title page, you may include title, author, date followed by the {\tt \\maketitle } command to produce the title page.
+\begin{verbatim}
+\title{Lab1: Introduction to R and LaTeX using Sweave}
+\author{Your Name}
+\date{\today}
+\maketitle
+
+\section{Introduction}
+\end{verbatim}
+
+\subsection*{Adding Structure}
+Several common \LaTeX commands are available under the Format menu, which include section, subsection, bold, italic, typewriter font, the verbatim environment and different types of lists to help you get started.  For this document I chose not to number the sections and subsections;  to suppress numbering add a * after section; this applies to other numbered environments  as we will see with equations.
+
+\subsection*{Equations}
+For equations, you may either use double \$\$ to show the beginning and end of an equation that will not be numbered or
+use the equation environment with or without a \*:
+\begin{verbatim}
+\begin{equation} % a numbered equation
+Y_i = \mu_i + \epslion_i
+\end{equation}
+\begin{equation*} % a numbered equation
+Y_i = \mu_i + \epsilon_i
+\end{equation*}
+
+\end{verbatim}
+which produces
+\begin{equation} % a numbered equation
+Y_i = \mu_i + \epsilon_i
+\end{equation}
+
+\begin{equation*} % a numbered equation
+Y_i = \mu_i + \epsilon_i
+\end{equation*}
+
+\section*{Including \R code}
+
+You can incorporate \R code into your Sweave document in one of two ways: with regular chunks, or with inline \R (or S)  expressions. Everything you put in an \R chunk will be evaluated as R code prior to running \LaTeX on your document.
+
+\subsection*{\R chunks}
+
+Regular \R chunks start with a start ‘tag’ {\tt <<>>=} and end with an end ‘tag’ {\tt @}. They are indicated with  a different background in RStudio.  For example, the following chunk
+\input{sweave-ex1.txt}
+
+produces the output
+ <<>>=
+  # a comment in an R chunk
+  X = cbind(1, matrix(rnorm(100*2, 0, 1), 100,2))
+  Y = X %*% c(1, 4, -.3) + rnorm(100, 0, 1)
+  @
+
+
+You can create a new \R chunk either by 1. manually typing the start and end tags, 2. clicking the green “Insert a new code chunk” button on the top right of your editor window in RStudio (just to the left of the Run buttons), or 3. using the relevant keyboard shortcut: Command-Option-I (Mac) or Control-Alt-I (Windows). 
+
+\subsection*{Chunk Arguments}
+You can specify many arguments at the top of the chunk (in between {\tt<<  >>)} that will change how the code is evaluated. Here are some key arguments:
+
+\begin{itemize}
+  \item eval: Should code in the chunk be evaluated ({\tt eval = T}) or completely ignored ({\tt eval = F})? If you have code in a chunk that is not complete, but you still want to create the document without that chunk, set {\tt eval = F}.
+
+\item echo: Should the raw code be repeated in the final document ({\tt echo = T}) or not? ({\tt echo = F}). In most papers you'll never repeat the code so you’ll usually set {\tt echo = F}.  For some HW you may be asked to show your code.
+
+\item fig.width, fig.height, fig.align: If your chunk creates a figure, these arguments will change its size and location. For example, {\tt fig.width = 4, fig.height = 10, fig.align = ‘center’} will create a centered figure that is 4 inches wide and 10 inches tall.
+\end{itemize}
+
+\subsection*{Setting global chunk options}
+If you want to change some options for all of your \R chunks, you can do this using the {\tt opts\_chunk\$set()} function in an R chunk at the beginning of your document. For example, in virtually all of your R chunks you will not want to echo the source code in the document. For this reason, it’s good to set the global chunk option to echo = F and then set echo = T when needed.  For example,
+
+<<echo=F>>=
+opts_chunk$set(echo=F,   # do not echo code in output
+              warning=F, # do not show warnings in output
+                         # use with caution; add at the end or when you
+                         # are sure there are no warnings
+              message=F  # suppress messages from functions in output
+              )
+@
+
+\input{sweave-global.txt}
+
+\subsection*{Inline \R code}
+You can evaluate \R expressions  inline in \LaTeX using the \LaTeX function {\tt \\Sexpr\{\}}
+- think S expression, where S is the language that preceeded \R.  For example, we can compute the mean of the $\Y$ vector we generated by the code {\tt  \\Sexpr\{round(mean(Y), 2)\}} which equals $\Sexpr{round(mean(Y), 2)}$.  Recompile to see if the values change!
+
+\section*{Figures}
+
+To create a figure in \LaTeX, we use the figure environment:
+\begin{verbatim}
+\begin{figure}
+% figure code here
+\end{figure}
+\end{verbatim}
+For example, Figure \ref{fig:Rfig} was created using
+\begin{figure}[h]
+<<echo=F,fig.height=4,fig.width=5,fig.align='center'>>=
+plot(X[,2], Y, xlab="X[2]")
+@
+\caption{Plot of simulated $X$ and $Y$}
+\label{fig:Rfig}
+\end{figure}
+\input{sweave-fig.txt}
+where the {\tt \\label\{ \}} function is used to provide a name for the label, that can be referenced using the {\tt \\ref\{ \}} function so that figure (or equation) numbers are automatically (re)numbered.
+Note that this also works with non-base-R-created figures (e.g. ggplot).
+Lastly, for figures that include externally generated images, see the {\tt \\includegraphics} function.
+
+\section*{Comments in \LaTeX}
+
+You may wish to comment out lines - either as part of debugging, to hide notes to yourself, or because you are not quite sure you want to delete the material yet!  There are two ways to go about this: using the comment character \% or to use the comment environment for longer comments.
+\begin{verbatim}
+% this is a comment
+% if you want to comment out a larger chunk use the "comment" package and then
+\begin{comment}
+this is a longer comment of an equation using some macros that I want to hide for now
+$$
+\Y = \X \b + \eps
+$$
+\end{comment}
+\end{verbatim}
+
+\section*{Conclusion}
+Those are the basics! If you're interested in using Sweave in some fashion not covered here, a quick Google search should be enough to learn how to do so. We recommend doing your assignments in Sweave as it allows for a clean and professional finished product. Also, it interfaces nicely with submissions, reproducibility, and version control via git(hub). As far as efficiency goes, I would recommend doing sketches of problem solutions on paper and then typing them up in \LaTeX; it can be quite a drag to have to think both about math and \LaTeX syntax simultaneously. Nevertheless, unless otherwise specified, you may also write up your solutions on paper (as long as you submit them electronically).
+
+\end{document}
