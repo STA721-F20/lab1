@@ -1,0 +1,9 @@
+\begin{verbatim}
+\begin{figure}[h]
+<<echo=F,fig.height=4,fig.width=5,fig.align='center'>>=
+plot(X[,2], Y, xlab="X[2]")
+@
+\caption{Plot of simulated $X$ and $Y$}
+\label{fig:Rfig}
+\end{figure}
+\end{verbatim}

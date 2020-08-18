@@ -14,7 +14,7 @@
 
 \section*{Introduction}
 
-Sweave files look like LaTeX files, but have a {\tt .Rnw} ending.  A key difference is that they allow you to embed R code within the \LaTeX document.  This is similar to the point of RMarkdown, but if your document has a lot of equations, you may find that the Rnw files provide more control and options than using Rmarkdown.
+Sweave files look like LaTeX files, but have a {\tt .Rnw} ending.  A key difference is that they allow you to embed R code within the \LaTeX document.  This is similar to the point of RMarkdown, but if your document has a lot of equations, you may find that the Rnw files provide more control and options than using Rmarkdown.  Plus using comments and placement of \verb \end{document} \ can make it easier to debug \R and \LaTeX!
 
 \section*{Creating a New Document}
 
@@ -69,7 +69,7 @@ use the equation environment with or without a \*:
 \begin{equation} % a numbered equation
 Y_i = \mu_i + \epslion_i
 \end{equation}
-\begin{equation*} % a numbered equation
+\begin{equation*} % an un-numbered equation
 Y_i = \mu_i + \epsilon_i
 \end{equation*}
 
@@ -79,9 +79,21 @@ which produces
 Y_i = \mu_i + \epsilon_i
 \end{equation}
 
-\begin{equation*} % a numbered equation
+\begin{equation*} % an un-numbered numbered equation
 Y_i = \mu_i + \epsilon_i
 \end{equation*}
+
+Here is the version using my macros for bold vectors and matrices
+\begin{verbatim}
+\begin{equation} % a numbered equation
+\Y = \mub + \eps
+\end{equation*}
+
+\end{verbatim}
+which produces
+\begin{equation} % a numbered equation
+\Y = \mub + \eps
+\end{equation}
 
 \section*{Including \R code}
 
@@ -100,7 +112,7 @@ produces the output
   @
 
 
-You can create a new \R chunk either by 1. manually typing the start and end tags, 2. clicking the green “Insert a new code chunk” button on the top right of your editor window in RStudio (just to the left of the Run buttons), or 3. using the relevant keyboard shortcut: Command-Option-I (Mac) or Control-Alt-I (Windows). 
+You can create a new \R chunk either by 1. manually typing the start and end tags, 2. clicking the green “Insert a new code chunk” button on the top right of your editor window in RStudio (just to the left of the Run buttons), or 3. using the relevant keyboard shortcut: Command-Option-I (Mac) or Control-Alt-I (Windows).
 
 \subsection*{Chunk Arguments}
 You can specify many arguments at the top of the chunk (in between {\tt<<  >>)} that will change how the code is evaluated. Here are some key arguments:

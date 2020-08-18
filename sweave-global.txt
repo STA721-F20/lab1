@@ -1,0 +1,10 @@
+\begin{verbatim}
+<<echo=F>>=
+opts_chunk$set(echo=F,   # do not echo code in output
+              warning=F, # do not show warnings in output
+                         # use with caution; add at the end or when you
+                         # are sure there are no warnings
+              message=F  # suppress messages from functions in output
+              )
+@
+\end{verbatim}

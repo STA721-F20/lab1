@@ -1,0 +1,7 @@
+\begin{verbatim}
+ <<>>=
+  # a comment in an R chunk
+  X = cbind(1, matrix(rnorm(100*2, 0, 1), 100,2))
+  Y = X %*% c(1, 4, -.3) + rnorm(100, 0, 1)
+  @
+\end{verbatim}
